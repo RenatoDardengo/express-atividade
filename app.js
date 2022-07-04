@@ -1,20 +1,27 @@
 const express = require ("express");
 const app = express();
 const port = 3000;
-const methodOverride = require ("method-override");
-const addressRoute = require("./src/routes/addressRoute");
 
-app.use(express.static(__dirname + "/src/public"));
-app.use(methodOverride("_method"));
+const addressRoute = require("./src/routes/addressRoute");
+const errorRoute = require ("./src/routes/errorRoute");
+const methodOverride = require ("method-override");
+
+app.use(express.static(__dirname + "/public"));
+
+app.set("views", __dirname + "/src/views");
+app.set("view engine", "ejs");
+
+app.use(methodOverride("_method"))
 app.use(express.json);
 app.use(express.urlencoded({extended:false}));
-app.set("view engine", "ejs");
-app.set("views", __dirname + "/src/views");
+
+
 
 app.use("/address", addressRoute);
+app.use("*", errorRoute);
 
 
 
 app.listen(port, ()=>{
-    console.log (`Servidor rodando em http://http://localhost:${port}`)
+    console.log (`Servidor rodando em http://localhost:${port}`)
 });
